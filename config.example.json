@@ -1,0 +1,11 @@
+{
+  "wb_projects": "~/.workbuddy/projects",
+  "wb_db": "~/.workbuddy/workbuddy.db",
+  "oc_db": "~/.local/share/opencode/opencode.db",
+  "oc_service": "~/.local/state/opencode/service.json",
+  "pin": true,
+  "auto": false,
+  "win_pos": [1600, 900],
+  "credit_left": 2680.0,
+  "credit_left_at": 1793791796
+}

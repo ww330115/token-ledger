@@ -1,0 +1,25 @@
+# 运行时生成的东西，一律不进仓库
+config.json
+config.demo.json
+data/
+logs/
+exports/
+portable.txt
+
+# 打包产物
+dist/
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
