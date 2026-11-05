@@ -2894,6 +2894,15 @@ def main():
     ap.add_argument("--version", action="version", version="Token 账本 %s" % VERSION)
     args = ap.parse_args()
 
+    # 输出被重定向到管道/文件时，Windows 默认用 cp1252，打印中文会直接崩；
+    # 控制台里保持系统默认，避免改了编码反而乱码。
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            if not stream.isatty():
+                stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
     global CFG_PATH
     if args.data_dir:
         set_data_dir(args.data_dir)
@@ -2921,7 +2930,7 @@ def main():
         return
 
     t0 = time.time()
-    n = store.scan()
+    n = len(store.records) if store.demo else store.scan()
     credits = store.reload_credits()
     if credits:
         store.apply_credits(credits)
