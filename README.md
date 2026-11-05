@@ -11,7 +11,7 @@ A tiny Windows desktop widget that turns your local AI client usage — **WorkBu
 - **One Python file, zero third-party dependencies.**
 - **Docs for humans and agents:** `README.md` for you, [`SKILL.md`](SKILL.md) for your agent.
 
-![Main window](docs/screenshots/demo-main.png)
+![Demo](docs/screenshots/demo.gif)
 
 > Every session, amount, and quota number in these screenshots comes from `--demo` fake data. None of it is the author's real usage.
 

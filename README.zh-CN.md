@@ -11,7 +11,7 @@
 - 单一 Python 文件，**零第三方依赖**（只用标准库）
 - 有给人和给 agent 的两套说明：`README.md`（人）+ `SKILL.md`（agent）
 
-![主界面](docs/screenshots/demo-main.png)
+![界面演示](docs/screenshots/demo.gif)
 
 > 截图里的会话、金额、额度全部是 `--demo` 生成的假数据，和作者的真实使用无关。
 
