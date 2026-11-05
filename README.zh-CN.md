@@ -1,5 +1,7 @@
 **English** | [简体中文](README.zh-CN.md)
 
+[![check](https://github.com/ww330115/token-ledger/actions/workflows/check.yml/badge.svg)](https://github.com/ww330115/token-ledger/actions/workflows/check.yml)
+
 # Token 账本 · Token Ledger
 
 一个 Windows 桌面小工具：把本机 AI 客户端（WorkBuddy、opencode 桌面版）每次请求的 **token、额度、积分、现金** 记成一本实时账，悬浮窗常驻桌面，随时看今天花了多少。

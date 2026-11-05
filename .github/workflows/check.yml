@@ -1,0 +1,31 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile
+        run: python -m py_compile token_ledger.py
+
+      - name: Demo self-check
+        shell: bash
+        run: |
+          python token_ledger.py --demo --check
+          python token_ledger.py --demo --check --json > demo.json
+          python -c "import json; d=json.load(open('demo.json', encoding='utf-8')); assert d['demo'] and d['records'] > 0; print('demo records:', d['records'])"
+
+      - name: Clean-runner self-check
+        shell: bash
+        run: |
+          python token_ledger.py --check --json > real.json
+          python -c "import json; d=json.load(open('real.json', encoding='utf-8')); assert d['records'] == 0; print('sources:', d['sources'])"

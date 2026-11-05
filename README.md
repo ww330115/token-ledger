@@ -1,5 +1,7 @@
 **English** | [简体中文](README.zh-CN.md)
 
+[![check](https://github.com/ww330115/token-ledger/actions/workflows/check.yml/badge.svg)](https://github.com/ww330115/token-ledger/actions/workflows/check.yml)
+
 # Token Ledger
 
 A tiny Windows desktop widget that turns your local AI client usage — **WorkBuddy** and **opencode desktop** — into a live ledger of tokens, quota, credits, and cash.
