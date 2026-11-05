@@ -1,45 +1,47 @@
-# Token 账本 · Token Ledger
+**English** | [简体中文](README.zh-CN.md)
 
-一个 Windows 桌面小工具：把本机 AI 客户端（WorkBuddy、opencode 桌面版）每次请求的 **token、额度、积分、现金** 记成一本实时账，悬浮窗常驻桌面，随时看今天花了多少。
+# Token Ledger
 
-- **只读本地日志**，不登录、不上传、不抓包
-- **五种计费口径分开记**，绝不混算：本地 / 美元 / 额度 / 免费 / 积分
-- 单一 Python 文件，**零第三方依赖**（只用标准库）
-- 有给人和给 agent 的两套说明：`README.md`（人）+ `SKILL.md`（agent）
+A tiny Windows desktop widget that turns your local AI client usage — **WorkBuddy** and **opencode desktop** — into a live ledger of tokens, quota, credits, and cash.
 
-![主界面](docs/screenshots/demo-main.png)
+- **Read-only.** It reads local log files. No login, no upload, no proxy interception.
+- **Five billing channels, never mixed:** local / USD / quota / free / credits.
+- **One Python file, zero third-party dependencies.**
+- **Docs for humans and agents:** `README.md` for you, [`SKILL.md`](SKILL.md) for your agent.
 
-> 截图里的会话、金额、额度全部是 `--demo` 生成的假数据，和作者的真实使用无关。
+![Main window](docs/screenshots/demo-main.png)
 
-## 它能回答什么
+> Every session, amount, and quota number in these screenshots comes from `--demo` fake data. None of it is the author's real usage.
 
-| 问题 | 界面位置 |
+## What it answers
+
+| Question | Where |
 |---|---|
-| 今天花了多少现金？Go 套餐用掉多少？ | 顶部第一行 |
-| opencode Go 的近 5 小时 / 本周 / 本月额度还剩多少？ | 账户区三个进度条 |
-| WorkBuddy 积分今天扣了多少、累计多少、余额还剩多少？ | 第二行积分区 |
-| 每个模型今天用了多少 token、折合多少钱？ | 右侧“今日模型”榜 |
-| 每一条请求具体是什么任务、什么模型、多少 token？ | 【明细】窗口 |
+| How much cash did I spend today? How much Go quota did I use? | First line of the header |
+| How much opencode Go quota is left (5-hour / weekly / monthly)? | Three meters in the account area |
+| How many WorkBuddy credits were used today, and how many are left? | Second line |
+| Which model burned the most tokens today? | "Today's models" list on the right |
+| What exactly was each request — task, model, tokens? | The **Details** window |
 
-## 截图
+## Screenshots
 
-| 明细表 | 模型统计 |
+| Details | Model stats |
 |---|---|
-| ![明细](docs/screenshots/demo-detail.png) | ![统计](docs/screenshots/demo-stats.png) |
+| ![Details](docs/screenshots/demo-detail.png) | ![Stats](docs/screenshots/demo-stats.png) |
 
-## 快速开始（Windows）
+## Quick start (Windows)
 
-### 方式一：便携包（不装 Python）
+### Option 1: portable package (no Python required)
 
-1. 到 [Releases](../../releases) 下载 `token-ledger-portable-win64.zip`
-2. 解压到任意目录（路径别含 `&`、`%` 这类字符）
-3. 双击 `run.bat`
+1. Download `token-ledger-portable-win64.zip` from [Releases](../../releases).
+2. Unzip it anywhere (avoid `&` and `%` in the path).
+3. Double-click `run.bat`.
 
-便携包自带 Python 运行时，配置和日志写在解压目录的 `data\` 里，删掉整个文件夹就干净卸载。
+The package bundles its own Python runtime. Config and logs live in `data\` next to the executable, so deleting the folder is a clean uninstall.
 
-### 方式二：源码运行
+### Option 2: run from source
 
-需要 Python 3.10+（Windows 官方安装包自带 tkinter）：
+Requires Python 3.10+ (the official Windows installer includes tkinter):
 
 ```powershell
 git clone https://github.com/ww330115/token-ledger.git
@@ -47,83 +49,77 @@ cd token-ledger
 pythonw token_ledger.py
 ```
 
-或者直接双击仓库里的 `run.bat`。
+Or just double-click `run.bat`.
 
-先看看能不能读到数据（不开窗口）：
+Check whether it can see your data (no window):
 
 ```powershell
 python token_ledger.py --check
 ```
 
-想先看界面长什么样、但本机没有这些客户端：
+Want to see the UI without any local client installed:
 
 ```powershell
 python token_ledger.py --demo
 ```
 
-## 数据从哪来
+## Where the data comes from
 
-全部是**只读**。路径都能在 `config.json` 里改，也能用命令行参数临时指定。
+Everything is **read-only**. All four paths can be overridden in `config.json` or on the command line.
 
-| 数据源 | 默认路径 | 用途 | 没有会怎样 |
+| Source | Default path | Used for | If missing |
 |---|---|---|---|
-| WorkBuddy 日志 | `~/.workbuddy/projects/**/*.jsonl` | 每轮请求的 token、积分、网关账单 | 内置/网关两条通道没有数据 |
-| WorkBuddy 台账 | `~/.workbuddy/workbuddy.db` | 每轮实际扣的积分、会话标题 | 积分按日志自报值算，任务名退化成目录名 |
-| opencode 会话库 | `~/.local/share/opencode/opencode.db` | 桌面版每条消息的 token 与 cost | 桌面通道没有数据 |
-| opencode 服务 | `~/.local/state/opencode/service.json` | 向本机服务要 Go 套餐真实额度 | 额度条显示 `—`，其余照常 |
+| WorkBuddy logs | `~/.workbuddy/projects/**/*.jsonl` | Per-request tokens, credits, gateway billing | No data for the built-in / gateway lanes |
+| WorkBuddy DB | `~/.workbuddy/workbuddy.db` | Credits actually charged, session titles | Credits fall back to the self-reported value in logs; task names fall back to folder names |
+| opencode DB | `~/.local/share/opencode/opencode.db` | Per-message tokens and cost from the desktop app | No data for the desktop lane |
+| opencode service | `~/.local/state/opencode/service.json` | Real Go quota from the local service | Quota meters show `—`; everything else still works |
 
-`~` 指当前用户目录（`C:\Users\你的名字`）。opencode 桌面版如果装在别处，把它自己的
-`opencode.db` 和 `service.json` 路径填进配置即可。
+`~` is your home directory (`C:\Users\<you>`). If opencode is installed elsewhere, point `opencode.db` and `service.json` at it.
 
-## 五种计费口径
+## The five billing channels
 
-这是本工具最在意的一点：**不同通道的“钱”不是同一种东西，不能相加**。
+This is the point of the tool: **"money" means different things on different channels, and they must never be added together.**
 
-| 口径 | 含义 | 数据来源 |
+| Channel | Meaning | Source |
 |---|---|---|
-| 本地 | 本机/离线模型，不计费 | `requestModelId` 以 `custom-local:` 开头 |
-| 美元 | 网关回传的 `list_cost`，真金白银 | 日志里的 `rawUsage.opencode.list_cost` |
-| 额度 | opencode Go 套餐内消耗，不按 token 收现金 | 桌面版 `providerID` 以 `opencode-go` 开头 |
-| 免费 | 免费模型，或套餐外但本轮 cost 为 0 | `-free` 模型 / 网关 0 元请求 |
-| 积分 | WorkBuddy 内置模型实扣积分 | 台账 `credit_json`，缺失时用日志 `rawUsage.credit` |
+| Local | Local/offline model, not billed | `requestModelId` starts with `custom-local:` |
+| USD | Gateway-returned `list_cost`, real money | `rawUsage.opencode.list_cost` in logs |
+| Quota | opencode Go usage, not billed per token | Desktop `providerID` starts with `opencode-go` |
+| Free | Free model, or a zero-cost request | `-free` models / zero-cost gateway requests |
+| Credits | WorkBuddy built-in models, charged in credits | `credit_json` in the DB, falling back to `rawUsage.credit` |
 
-积分单价官方没公开，所以本工具**只显示积分，不把积分折成人民币或美元**。
-Go 套餐的金额是按官方模型目录单价折算的“额度价值”，不额外扣现金。
+The credit price is not public, so the tool **shows credits, never converts them to money**.
+Go amounts are the "quota value" computed from official model prices; they do not charge your card.
 
-## 命令行
+## CLI
 
 ```text
-python token_ledger.py [选项]
+python token_ledger.py [options]
 
-  --check                 只打印统计，不开窗口
-  --json                  配合 --check 输出机器可读 JSON（给 agent 用）
-  --demo                  假数据预览界面，不读本机任何文件
-  --data-dir DIR          配置和日志放哪（默认 %APPDATA%\TokenLedger）
-  --config FILE           指定配置文件
-  --projects DIR          WorkBuddy 日志目录
-  --workbuddy-db FILE     WorkBuddy 台账 workbuddy.db
-  --opencode-db FILE      opencode 会话库 opencode.db
-  --service-json FILE     opencode 服务地址文件 service.json
-  --detail                启动时直接打开明细表
-  --stats                 启动时直接打开模型统计图
-  --only-oc               悬浮窗只显示 opencode 通道
-  --version               版本号
+  --check                 Print stats, no window
+  --json                  With --check, emit machine-readable JSON (for agents)
+  --demo                  Preview the UI with fake data; reads no local files
+  --data-dir DIR          Where config and logs live (default %APPDATA%\TokenLedger)
+  --config FILE           Use a specific config file
+  --projects DIR          WorkBuddy log directory
+  --workbuddy-db FILE     WorkBuddy workbuddy.db
+  --opencode-db FILE      opencode opencode.db
+  --service-json FILE     opencode service.json
+  --detail                Open the details window on start
+  --stats                 Open the model stats window on start
+  --only-oc               Show only the opencode lane
+  --version               Print version
 ```
 
-示例：
+Examples:
 
 ```powershell
-# 自检 + 中文摘要
 python token_ledger.py --check
-
-# 给脚本/agent 的 JSON
 python token_ledger.py --check --json
-
-# 日志在别处
 python token_ledger.py --check --projects "D:\backup\.workbuddy\projects"
 ```
 
-`--check --json` 输出结构（节选）：
+`--check --json` returns (excerpt):
 
 ```json
 {
@@ -141,9 +137,11 @@ python token_ledger.py --check --projects "D:\backup\.workbuddy\projects"
 }
 ```
 
-## 配置
+`billing` keys and lane names stay in Chinese because they are displayed in the UI.
 
-首次运行会在 `%APPDATA%\TokenLedger\config.json` 生成配置。可以手动改，键名与命令行参数对应：
+## Configuration
+
+On first run a config file is created at `%APPDATA%\TokenLedger\config.json`:
 
 ```json
 {
@@ -159,76 +157,72 @@ python token_ledger.py --check --projects "D:\backup\.workbuddy\projects"
 }
 ```
 
-- `pin`：窗口是否置顶
-- `auto`：是否每 2 秒自动扫描（默认手动，更省电）
-- `win_pos`：窗口位置，拖动后自动保存
-- `credit_left` / `credit_left_at`：你手动填的积分余额基准和时间；界面会在此基础上减去之后实扣的积分
+- `pin` — keep the window on top
+- `auto` — rescan every 2 seconds (off by default; manual refresh is lighter)
+- `win_pos` — window position, saved when you drag it
+- `credit_left` / `credit_left_at` — your manually entered credit balance and timestamp; the UI subtracts credits spent since then
 
-**数据目录可以换**：
+**Change the data directory:**
 
-- 环境变量 `TOKEN_LEDGER_HOME=D:\my-data`
-- 命令行 `--data-dir D:\my-data`
-- 便携模式：在 `token_ledger.py` 旁边放一个空文件 `portable.txt`，数据就写到 `data\`
+- `TOKEN_LEDGER_HOME=D:\my-data`
+- `--data-dir D:\my-data`
+- Portable mode: drop an empty `portable.txt` next to `token_ledger.py`; data goes to `data\`
 
-配置、错误日志（`logs\error.log`）、额度观测（`logs\额度观测.csv`）、导出 CSV（`exports\`）都在这个目录里，**不会写进代码目录**。
+Config, `logs\error.log`, `logs\额度观测.csv`, and exported CSVs all live there — **nothing is written to the code directory**.
 
-## 常见问题
+## FAQ
 
-**读完 0 条怎么办？**
-`--check` 会打印四个数据源的实际路径和是否存在。把路径填对即可：
+**`--check` reads 0 records?**
+It prints the actual path and existence of all four sources. Point them at the right place:
 
 ```powershell
-python token_ledger.py --check --projects "D:\你的\.workbuddy\projects"
+python token_ledger.py --check --projects "D:\your\.workbuddy\projects"
 ```
 
-**opencode 额度一直显示 `—`？**
-需要 opencode 桌面版正在运行（它会把本地服务地址和口令写进 `service.json`）。本工具只访问 `127.0.0.1`，不经过代理。
+**The opencode quota always shows `—`?**
+The opencode desktop app must be running; it writes the local service address and password to `service.json`. The tool only talks to `127.0.0.1` and bypasses proxies.
 
-**积分余额怎么填？**
-点界面上的“剩 未填（点这里）”，输入当前官方余额。之后显示的是“基准 − 基准之后的实扣”，不会凭空估算。
+**How do I set the credit balance?**
+Click "剩 未填（点这里）" in the UI and enter the current official balance. From then on it shows "baseline − credits spent since".
 
-**数字和官方后台对不上？**
-- 美元/额度以日志和本机服务返回为准，官方改价后可能滞后
-- 积分以台账 `credit_json` 为准
-- 官方页面可能有延迟或不同的统计口径
+**Numbers differ from the official dashboard?**
+- USD/quota come from logs and the local service; official price changes may lag
+- Credits come from `credit_json`
+- The official site may aggregate differently or update late
 
-**支持 macOS / Linux 吗？**
-代码能 import、`--check` 能跑，但托盘、多屏定位、贴边收起是 Win32 实现，非 Windows 上会自动关闭。界面本身是 tkinter，理论上可移植，但未实测。
+**macOS / Linux?**
+It imports and `--check` runs, but the tray, multi-monitor placement, and edge-docking are Win32-only and disable themselves elsewhere. The UI is tkinter and should be portable, but it is untested.
 
-**会不会把我用了多少 token 传出去？**
-不会。唯一的网络请求是发往本机 `127.0.0.1` 的 opencode 服务，用于取额度。没有任何遥测、统计、自动更新。
+**Does it upload my usage?**
+No. The only network request goes to `127.0.0.1` (the opencode service) to read quota. No telemetry, no auto-update.
 
-**为什么叫“账本”而不是“监控”？**
-它只读日志文件，不注入、不代理、不拦截请求，也不改任何客户端的数据。
+## Privacy
 
-## 隐私
+- All data comes from local log files and never leaves the machine
+- The only request: `http://127.0.0.1:<port>/api/experimental/usage/limits`
+- Exported CSVs stay in your data directory
+- Screenshots in this repo use `--demo` fake data
 
-- 所有数据来自你本机的日志文件，**不出本机**
-- 唯一的网络请求：`http://127.0.0.1:<端口>/api/experimental/usage/limits`
-- 导出的 CSV 只写在你选定的数据目录
-- 仓库里的截图使用 `--demo` 假数据，不含任何真实会话
+## For agents
 
-## 给 agent 用
-
-仓库里的 [`SKILL.md`](SKILL.md) 是给 AI agent 的说明：怎么调用、参数是什么、JSON 怎么解析。
-最简单的接入方式：
+[`SKILL.md`](SKILL.md) documents how an agent should call this tool and how to read the JSON.
 
 ```powershell
 python token_ledger.py --check --json
 ```
 
-agent 读 JSON 里的 `today` / `totals` / `billing` 即可，不需要解析中文输出，也不需要开窗口。
+Read `today` / `totals` / `billing` from the JSON. No need to parse the Chinese text output, no window.
 
-## 开发
+## Development
 
-- 单文件，约 3000 行，零第三方依赖
-- 改动后至少跑一遍：`python token_ledger.py --check`、`--check --json`、`--demo`
-- 打便携包：`powershell -ExecutionPolicy Bypass -File build_portable.ps1`
+- Single file, ~3,000 lines, zero third-party dependencies
+- Before committing: `--check`, `--check --json`, `--demo`
+- Build the portable package: `powershell -ExecutionPolicy Bypass -File build_portable.ps1`
 
-## 免责声明
+## Disclaimer
 
-非官方工具，与 WorkBuddy、opencode 官方无任何关系。价格、额度、积分以官方为准；
-本工具只做本地记录与展示，不对账目差异负责。
+Unofficial tool. Not affiliated with WorkBuddy or opencode. Prices, quota, and credits are
+authoritative only on their official dashboards; this tool merely records and displays local data.
 
 ## License
 

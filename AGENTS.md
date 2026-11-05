@@ -8,7 +8,8 @@
 token-ledger/
 ├─ token_ledger.py        # 全部实现（单文件）
 ├─ SKILL.md               # 给 agent 的使用说明
-├─ README.md              # 给用户的使用说明
+├─ README.md              # 给用户的使用说明（英文，GitHub 默认显示）
+├─ README.zh-CN.md        # 中文版
 ├─ config.example.json    # 配置模板
 ├─ run.bat                # Windows 双击启动
 ├─ build_portable.ps1     # 打便携包（Python embed + tkinter）
