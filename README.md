@@ -42,7 +42,7 @@
 需要 Python 3.10+（Windows 官方安装包自带 tkinter）：
 
 ```powershell
-git clone https://github.com/<你的用户名>/token-ledger.git
+git clone https://github.com/ww330115/token-ledger.git
 cd token-ledger
 pythonw token_ledger.py
 ```
