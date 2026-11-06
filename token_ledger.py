@@ -1924,10 +1924,11 @@ class Ledger:
         for r in self.store.records:
             if r["ts"] < today:
                 continue
-            a = agg.get(r["model"])
+            key = (r["model"], r["lane"])   # 同名模型可能同时走两条通道，不能合并
+            a = agg.get(key)
             if a is None:
-                a = agg[r["model"]] = {"tok": 0, "usd": 0.0, "go": 0.0,
-                                       "credit": 0.0, "has_cr": False}
+                a = agg[key] = {"tok": 0, "usd": 0.0, "go": 0.0,
+                                "credit": 0.0, "has_cr": False}
             a["tok"] += r["in"] + r["out"] + r["think"] + r["cache"]
             a["usd"] += r["usd"]
             if bill_of(r) == "额度":
@@ -1963,8 +1964,9 @@ class Ledger:
                 for c in cells:
                     c.config(text="")
                 continue
-            model, a = rows[idx]
-            cells[0].config(text=fit(short_model(model), 16), fg=FG)
+            (model, lane), a = rows[idx]
+            label = "%s %s" % (LANE_SHORT.get(lane, lane), short_model(model))
+            cells[0].config(text=fit(label, 16), fg=FG)
             cells[1].config(text=fmt_k(a["tok"]), fg=FG_DIM)
             money = a["usd"] + a["go"]
             if money:
