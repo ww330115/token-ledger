@@ -22,7 +22,7 @@ A tiny Windows desktop widget that turns your local AI client usage — **WorkBu
 | How much cash did I spend today? How much Go quota did I use? | First line of the header |
 | How much opencode Go quota is left (5-hour / weekly / monthly)? | Three meters in the account area |
 | How many WorkBuddy credits were used today, and how many are left? | Second line |
-| Which model burned the most tokens today? | "Today's models" list on the right |
+| Which model burned the most tokens today, and on which channel? | "Today's models" list on the right (one row per channel) |
 | What exactly was each request — task, model, tokens? | The **Details** window |
 
 ## Screenshots
@@ -92,6 +92,10 @@ This is the point of the tool: **"money" means different things on different cha
 
 The credit price is not public, so the tool **shows credits, never converts them to money**.
 Go amounts are the "quota value" computed from official model prices; they do not charge your card.
+
+The model ranking follows the same rule: it groups by **channel + model**, so the same model name can
+appear twice — once under the built-in channel (credits) and once under Go (quota value). Those two
+rows are different things; never add them together.
 
 ## CLI
 
@@ -186,6 +190,17 @@ The opencode desktop app must be running; it writes the local service address an
 
 **How do I set the credit balance?**
 Click "剩 未填（点这里）" in the UI and enter the current official balance. From then on it shows "baseline − credits spent since".
+
+**Why does the same model appear twice in the ranking?**
+Because it can be reached through different billing channels. For example, `deepseek-v4.1-flash` is
+available both as a WorkBuddy built-in model (charged in credits) and through opencode Go (counted
+against quota). The ranking groups by **channel + model**, so each row shows its own amount. Credits
+and quota value are different things — do not add them together.
+
+**The quota panel says "接口不通" right after opencode restarts?**
+opencode rewrites `service.json` (new port and password) when it restarts. If the ledger happens to
+poll during that window, the request fails. It retries every 60 seconds and recovers on its own;
+click **Refresh** to force it immediately.
 
 **Numbers differ from the official dashboard?**
 - USD/quota come from logs and the local service; official price changes may lag
